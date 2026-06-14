@@ -21,7 +21,7 @@ This repo (`brewdesk-docs`) — public docs only:
 | `docs/03-decisions-log.md` | Every locked decision with reasoning |
 | `docs/04-meeting-notes.md` | Optional session notes |
 | `docs/05-tech-spec.md` | Stack, schema, RLS, folder structure |
-| `docs/07-build-timeline.md` | 16-week phased plan + tasks + risks |
+| `docs/06-build-timeline.md` | 16-week phased plan + tasks + risks |
 | `docs/glossary.md` | Term consistency (silent / chill / spot / etc.) |
 | `docs/principles.md` | 12 product principles, referenced in decisions |
 | `docs/portfolio-narrative.md` | Interview prep, recruiter-facing writeup |
