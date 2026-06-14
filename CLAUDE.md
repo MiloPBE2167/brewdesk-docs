@@ -194,7 +194,7 @@ When updating, bump version + note change in `docs/03-decisions-log.md`.
 
 ### At session start, Claude fetches:
 1. `docs/02-current-status.md` (ALWAYS)
-2. `docs/07-build-timeline.md` (ALWAYS — contains tasks now)
+2. `docs/06-build-timeline.md` (ALWAYS — contains tasks now)
 3. `docs/04-meeting-notes.md` (last 2 entries if exist)
 4. Topic-specific:
    - Tech discussion → `docs/05-tech-spec.md`
