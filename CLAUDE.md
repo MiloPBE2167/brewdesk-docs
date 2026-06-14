@@ -84,6 +84,12 @@ After every session, output updated MD files for Khánh to commit.
 
 **Session start ritual:** Khánh paste 1 line:
 > "Session start. Phase <N>. Last commit: <hash/date>. Topic: <X>."
+
+Docs:
+- https://raw.githubusercontent.com/MiloPBE2167/brewdesk-docs/main/docs/02-current-status.md
+- https://raw.githubusercontent.com/MiloPBE2167/brewdesk-docs/main/docs/03-decisions-log.md
+- https://raw.githubusercontent.com/MiloPBE2167/brewdesk-docs/main/docs/06-build-timeline.md
+
 Claude fetches relevant docs automatically.
 
 **Session end ritual:** Claude outputs:
