@@ -122,7 +122,7 @@ See `docs/principles.md`. Reference them in arguments:
 
 **Phase:** Build Phase, Week 1 of 16 (P3 portfolio-first plan)
 
-**Stack (locked):** Next.js 14 (App Router), Supabase (Singapore region), Vercel, Qwen2.5 via Groq, Mapbox, shadcn/ui + Tailwind
+**Stack (locked):** Next.js 16 (App Router + Turbopack), pnpm, Supabase (Singapore region), Vercel, Qwen2.5 via Groq, Mapbox, shadcn/ui + Tailwind, Node ≥20.9
 
 **Repo structure:**
 - `brewdesk-docs` (public) — docs, CLAUDE.md, decision log
@@ -222,5 +222,5 @@ Notion is NOT auto-read.
 
 ---
 
-*Version 2.0 — 2026-06-14*
-*Changed: Pivot to P3 portfolio-first, intern context, repo split, scope re-locked*
+*Version 2.1 — 2026-06-15*
+*Changed: Bump Next.js 14 → 16, lock pnpm + Node ≥20.9*
