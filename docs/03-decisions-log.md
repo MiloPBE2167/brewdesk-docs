@@ -262,3 +262,66 @@ checkins (
 - Email deliverability rate < 95% trong Beta v1 (magic link rơi vào spam thành critical issue)
 - User feedback cho thấy login friction quá cao → return rate thấp
 - Mở rộng sang high_school demographic mà email không phải kênh primary (Zalo/Messenger phổ biến hơn ở lứa này)
+
+## 2026-06-15 — Bump Next.js lock: 14 → 16 (current stable, agent-aware scaffold)
+
+**Decision:** Stack lock đổi từ "Next.js 14 (App Router)" sang "Next.js 16 (App Router + Turbopack)". Mọi reference Next.js 14 trong docs được sync.
+
+**Context:** Lock cũ "Next.js 14" có trong tech-spec + CLAUDE.md + timeline nhưng không có entry decisions-log nào giải thích reasoning — tức là không phải decision được defend, chỉ là default đang thịnh hành thời điểm research stack. Khi chuẩn bị chạy `create-next-app` hôm nay, raise lại để kiểm tra.
+
+**Reasoning:**
+- Next.js 14 EOL 26/10/2025 — không còn security update. Portfolio repo public install framework EOL Day 1 = negative signal cho recruiter Y2.
+- Next.js 16.2.9 LTS là current stable tính đến 9/6/2026; matured 8 tháng kể từ stable release 10/2025.
+- `create-next-app@latest` defaults trùng exact stack mình locked: TypeScript + Tailwind + ESLint + App Router + Turbopack. Không cần customize prompts.
+- Scaffold mặc định ship `AGENTS.md` + `CLAUDE.md` cho coding agents — fit với "Claude co-builder" framing, app repo CLAUDE.md sẽ hoạt động như code-pattern guide bổ sung cho docs repo CLAUDE.md (behavior guide).
+- Turbopack default thay webpack — mình không có webpack custom config, irrelevant cost.
+- Recruiter signal: "ship trên current stable" >>> "ship trên EOL."
+
+**Alternatives considered:**
+- **Giữ Next.js 14** (rejected — EOL, không còn security patch, negative recruiter signal).
+- **Next.js 15 LTS** (rejected — support hết 21/10/2026 đúng giữa Phase 8 LLM moderation, sẽ phải upgrade ngay khi đang push Beta v2 = distraction tệ nhất time; thêm nữa 15 không có AGENTS.md/CLAUDE.md default trong scaffold).
+- **Stay on 14 và migrate khi cần** (rejected — migration cost 14→16 không nhỏ, làm sớm rẻ hơn làm khi đã có code mass).
+
+**Tradeoffs:**
+- Tutorial YouTube/Medium phần lớn còn ở Next.js 14 (Khánh first-time Next.js). Mitigation: dùng docs chính thức nextjs.org (đã update 16), plus AGENTS.md/CLAUDE.md trong scaffold sẽ guide Claude generate code đúng version.
+- Cache Components beta trong 16 — default off, không touch trong MVP.
+- Minimum Node 20.9 — Khánh xác nhận trước scaffold.
+
+**Reversal trigger:**
+- Khả năng rất thấp. Trigger duy nhất: Next.js 17 ra trong Phase 6-7 với breaking change đáng để upgrade — sẽ raise như entry mới, không reverse decision này.
+
+---
+
+## 2026-06-15 — Package manager = pnpm (qua corepack)
+
+**Decision:** Dùng `pnpm` cho `brewdesk-app`, enable qua `corepack` (built-in Node ≥16.10).
+
+**Reasoning:**
+- Next.js docs official dùng pnpm trong example commands → ít lệch tài liệu, copy-paste từ docs không cần dịch.
+- pnpm disk-efficient (content-addressable store) — quan trọng khi Khánh switch máy VN ↔ US.
+- Corepack có sẵn trong Node, không phải install thêm gì hệ thống.
+- Recruiter signal: pnpm = modern tooling choice, > npm về tốc độ + monorepo readiness (nếu sau split docs/app cùng workspace).
+
+**Alternatives considered:**
+- **npm** (rejected — universal nhưng chậm hơn, không match docs default Next.js, recruiter signal thấp hơn).
+- **yarn** (rejected — yarn 1 EOL, yarn berry phức tạp cho solo dev, không phổ biến trong Next.js community 2026).
+- **bun** (rejected — bun runtime + bun install promising nhưng còn rough edges cho Next.js 16, không phải lúc test new tooling khi đã có timeline tight).
+
+**Tradeoff:** Khánh phải nhớ chạy `corepack enable` khi setup máy mới. Một dòng, acceptable.
+
+**Reversal trigger:** pnpm bug nghiêm trọng làm break Vercel deploy hoặc Supabase CLI — chuyển npm.
+
+---
+
+## 2026-06-15 — CLAUDE.md tách 2 file: docs repo (behavior) vs app repo (code patterns)
+
+**Decision:** Giữ default `CLAUDE.md` + `AGENTS.md` mà `create-next-app@latest` generate trong `brewdesk-app`. Không replace, không merge với docs repo CLAUDE.md.
+
+**Reasoning:**
+- 2 file có function khác nhau:
+  - `brewdesk-docs/CLAUDE.md` = co-builder behavior (pushback, principles, decisions, session protocol)
+  - `brewdesk-app/CLAUDE.md` = code patterns (Next.js conventions, file structure, framework versioning guidance)
+- Claude khi sửa code trong `brewdesk-app` cần Next.js-specific guidance hơn là principle reminder. Khi discuss decisions trong `brewdesk-docs` cần behavior + principles, không cần Next.js conventions.
+- Merge = file dài, signal-to-noise giảm. Tách = mỗi file purpose-clear.
+
+**Reversal trigger:** Maintenance tax 2 file CLAUDE.md trở nên painful (drift, conflict). Lúc đó merge với rõ section divider.
