@@ -6,7 +6,7 @@ _Version 1.0 — 2026-06-14_
 
 | Layer | Choice | Reason |
 |---|---|---|
-| Framework | Next.js 14 (App Router) | Modern React, server components, deploy nhanh trên Vercel |
+| Framework | Next.js 16 (App Router + Turbopack) | Current stable, agent-aware scaffold (AGENTS.md/CLAUDE.md), Turbopack default ⇒ build/dev nhanh hơn webpack |
 | Hosting | Vercel | Zero-config với Next.js, free tier đủ closed beta |
 | DB + Auth | Supabase (Singapore region) | Postgres + Auth + Realtime + RLS, free tier đủ MVP |
 | UI | shadcn/ui + Tailwind CSS | Copy-paste components, accessible, recruiter signal |
