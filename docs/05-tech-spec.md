@@ -14,6 +14,9 @@ _Version 1.0 — 2026-06-14_
 | Map | Mapbox GL JS | Free tier ~50k loads/month |
 | LLM (Beta v2) | Qwen2.5 via Groq | Cost-effective, fast inference |
 
+**Package manager:** pnpm (qua corepack). Lock 2026-06-15.
+**Node:** ≥20.9 (Next.js 16 minimum).
+
 **Out of stack (locked):**
 - No pgvector (defer post-MVP)
 - No Redis (Postgres đủ)
