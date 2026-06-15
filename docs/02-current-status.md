@@ -1,6 +1,6 @@
 # Current Status
 
-_Updated: 2026-06-14_
+_Updated: 2026-06-15_
 
 ## Phase
 Build Phase — Week 1 of 16 (P3 portfolio-first)
@@ -9,11 +9,12 @@ Build Phase — Week 1 of 16 (P3 portfolio-first)
 Portfolio-first, startup-optional. Optimize cho recruiter signal, measure user signal lightly.
 
 ## Now working on
-**Phase 1 — Foundation** (15/6 – 28/6)
-- Next.js 14 + Supabase (Singapore) + Vercel setup
-- Auth via magic link
-- Schema 3 bảng đầu (users, cafes, checkins) + RLS
-- Initial shadcn/ui setup
+**Phase 1 — Foundation** (14/6 – 28/6)
+- Pre-Monday: Next.js 16 scaffold + push (14/6)
+- Supabase project Singapore + `@supabase/ssr` (15/6)
+- Auth via magic link (17/6)
+- Schema 3 bảng đầu (profiles, cafes, checkins) + RLS (19/6)
+- shadcn/ui setup (18/6)
 
 ## Target milestones
 - **Hè VN Beta v1 launch:** 17/8/2026 (2 ngày trước về Mỹ)
@@ -31,6 +32,9 @@ Portfolio-first, startup-optional. Optimize cho recruiter signal, measure user s
 - [ ] App repo (`brewdesk-app`) — chưa setup (next chat sẽ làm)
 
 ## Recent decisions (xem `03-decisions-log.md`)
+- 2026-06-15: Bump Next.js lock 14 → 16 (EOL avoidance + recruiter signal)
+- 2026-06-15: Package manager = pnpm qua corepack
+- 2026-06-15: CLAUDE.md tách 2 (docs = behavior, app = code patterns)
 - 2026-06-14: Pivot to P3 (portfolio-first, startup-optional)
 - 2026-06-14: Validation pass → transition to build
 - 2026-06-14: Manual café entry, solo, ~50 quán
