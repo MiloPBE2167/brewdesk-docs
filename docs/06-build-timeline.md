@@ -76,19 +76,22 @@ Middle zone → pivot, viết doc.
 
 ### Phase 1 detailed tasks (15/6 – 28/6)
 
-**Pre-Monday setup (next chat sẽ làm):**
-- [ ] Create repo `brewdesk-app` (public, empty)
-- [ ] Init Next.js 14 with App Router + TypeScript + Tailwind
-- [ ] Push initial commit
+**Pre-Monday setup (14/6 — Sun, before intern week starts):**
+- [x] Lock decisions: Next.js 16, pnpm, double CLAUDE.md (xem 03-decisions-log.md, 2026-06-15)
+- [ ] Verify Node ≥20.9 (`node -v`)
+- [ ] `corepack enable && corepack prepare pnpm@latest --activate`
+- [ ] `pnpm create next-app@latest brewdesk-app --yes`
+- [ ] `cd brewdesk-app && pnpm dev` (smoke test localhost:3000)
+- [ ] Initial commit + push to GitHub `MiloPBE2167/brewdesk-app` (public)
 
 **Week 1 (15-21/6):**
-- [ ] Mon 15/6: Next.js 14 (App Router) skeleton, push to `brewdesk-app`
-- [ ] Mon 15/6: Supabase project (Singapore region) + connect via `@supabase/ssr`
-- [ ] Tue 16/6: Vercel hookup, env vars, auto deploy on push
-- [ ] Wed 17/6: Auth — magic link, `/login`, `/auth/callback`, `/dashboard` protected
-- [ ] Thu 18/6: Install shadcn/ui, setup theme, build login UI
-- [ ] Fri 19/6: SQL migration — profiles + cafes + checkins (3 bảng)
-- [ ] Sat 20/6: Field day — đi 5-10 café Q1 quan sát, kick off café list
+- [ ] Mon 15/6: Supabase project (Singapore region), get URL + anon key
+- [ ] Mon 15/6: Install `@supabase/ssr @supabase/supabase-js`, setup `lib/supabase/{client,server,middleware}.ts`
+- [ ] Tue 16/6: Vercel hookup, env vars (SUPABASE_URL, ANON_KEY), auto deploy on push to main
+- [ ] Wed 17/6: Auth — magic link, `/login`, `/auth/callback`, `/dashboard` protected via middleware
+- [ ] Thu 18/6: Install shadcn/ui (`pnpm dlx shadcn@latest init`), setup theme, build login UI
+- [ ] Fri 19/6: SQL migration — profiles + cafes + checkins (3 bảng) trong `supabase/migrations/`
+- [ ] Sat 20/6: Field day — đi 5-10 café Q1 quan sát, bắt đầu café list spreadsheet
 - [ ] Sun 21/6: Status update + weekly review
 
 **Week 2 (22-28/6):**
