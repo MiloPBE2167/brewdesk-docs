@@ -325,3 +325,55 @@ checkins (
 - Merge = file dài, signal-to-noise giảm. Tách = mỗi file purpose-clear.
 
 **Reversal trigger:** Maintenance tax 2 file CLAUDE.md trở nên painful (drift, conflict). Lúc đó merge với rõ section divider.
+
+---
+
+## 2026-06-16 — Auth library: @supabase/ssr (deprecated auth-helpers-nextjs)
+
+**Decision:** Dùng `@supabase/ssr` (v0.12.0) cho Next.js App Router integration. Không dùng `@supabase/auth-helpers-nextjs`.
+
+**Context:** Khi research auth setup hôm nay, nhiều tutorial 2024 và đầu 2025 vẫn dùng `auth-helpers-nextjs`. Supabase team đã deprecate package đó và migrate sang `@supabase/ssr` từ 2024 — bất kỳ tutorial nào dùng `auth-helpers` đều stale.
+
+**Reasoning:**
+- `@supabase/auth-helpers-nextjs` deprecated bởi Supabase team, không còn maintain
+- `@supabase/ssr` là official replacement, designed cho App Router + Server Components
+- Cookie-based session với `getAll`/`setAll` API mới — chuẩn pattern hiện tại
+- Recruiter signal: dùng official current pattern > copy outdated tutorial
+
+**Alternatives considered:**
+- `@supabase/auth-helpers-nextjs` (rejected — deprecated, không maintain)
+- Manual cookie handling với `@supabase/supabase-js` only (rejected — reinventing the wheel, dễ sai cookie scope/SameSite)
+- NextAuth.js + Supabase adapter (rejected — thêm 1 layer indirection không cần thiết khi đã chọn Supabase Auth làm canonical)
+
+**Tradeoff:**
+- `@supabase/ssr` còn relatively new (pre-1.0), API có thể thay đổi minor — phải watch CHANGELOG
+- Mọi tutorial cũ (2024 và trước) dùng `auth-helpers` — phải skip những resource đó, dựa vào docs supabase.com/docs
+
+**Reversal trigger:** Supabase release lib mới (ví dụ stabilize thành v1.0 với breaking changes lớn), hoặc switch khỏi Supabase Auth.
+
+---
+
+## 2026-06-16 — Next.js 16 file convention: proxy.ts (not middleware.ts)
+
+**Decision:** Session refresh file ở `brewdesk-app/proxy.ts`, không phải `middleware.ts`.
+
+**Context:** Sau khi setup `middleware.ts` theo pattern Supabase docs (docs còn dùng tên cũ), dev server warn:
+> `The "middleware" file convention is deprecated. Please use "proxy" instead.`
+
+Đây là breaking convention change trong Next.js 16, không phải deprecation lâu dài.
+
+**Reasoning:**
+- Next.js 16 rename `middleware.ts` → `proxy.ts` để làm rõ purpose: file nằm ở network boundary, không phải Express-style middleware chain
+- `middleware.ts` vẫn work nhưng deprecated, sẽ remove trong future minor version → fix sớm rẻ hơn fix khi đang push feature
+- Codemod `npx @next/codemod middleware-to-proxy .` rename file + rename export `middleware` → `proxy`, `config` matcher giữ nguyên
+- Một note: `proxy.ts` chạy Node.js runtime, không support Edge Runtime. BrewDesk không cần Edge → ok
+
+**Alternatives considered:**
+- Giữ `middleware.ts` đến khi forced upgrade (rejected — deprecated warning xuất hiện mỗi `pnpm dev`, noise; fix 30 giây không lý do defer)
+- Manual rename + manual edit (rejected — codemod official, ít error hơn manual)
+
+**Tradeoff:** Supabase docs (state 2026-06) còn dùng tên `middleware.ts` cho ví dụ Next.js — khi reference Supabase docs phải mental-map sang `proxy.ts`. Tutorials Next.js cũ tương tự.
+
+**Reversal trigger:** Khả năng rất thấp. Nếu cần Edge Runtime (latency-sensitive auth ở edge nodes) → quay lại `middleware.ts` cho phần đó. BrewDesk single-region (Singapore) không có use case.
+
+---
