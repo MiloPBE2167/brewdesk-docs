@@ -377,3 +377,38 @@ checkins (
 **Reversal trigger:** Khả năng rất thấp. Nếu cần Edge Runtime (latency-sensitive auth ở edge nodes) → quay lại `middleware.ts` cho phần đó. BrewDesk single-region (Singapore) không có use case.
 
 ---
+
+## 2026-06-18 — Auth: email/password + magic link (amend 2026-06-14 magic-link-only)
+
+**Decision:** Beta v1 hỗ trợ **cả hai** phương thức trên cùng `/login`: email + password (`signInWithPassword` / `signUp`) **và** magic link (`signInWithOtp`). Một route `app/auth/confirm/route.ts` (`verifyOtp` theo `token_hash`) xử lý chung cho cả magic link và email confirmation của signup.
+
+**Context:** Amend decision 2026-06-14 ("Auth = email magic link, không password"). Entry cũ reject password vì "phải build reset flow + brute-force rate limit + password hashing = 1-2 ngày, attack surface lớn". Khi implement thực tế, lý do đó không còn đứng vững.
+
+**Reasoning:**
+- Supabase Auth lo sẵn password hashing, brute-force rate limit, và reset flow out-of-box → chi phí "1-2 ngày" mà entry cũ lo ngại gần như bằng 0. Objection gốc về password đã được mitigate bởi chính platform đã chọn.
+- Password = login tức thì không cần email round-trip → tốt cho dev/testing lặp lại và returning user không muốn chờ email.
+- Magic link giữ lại làm lựa chọn passwordless, onboarding friction thấp cho user mới.
+- Safety concern trong entry 2026-06-14 nhắm vào OAuth/strangers, không phải password per se → không xung đột.
+- Portfolio signal: handle nhiều auth method + một confirm route dùng chung là pattern Supabase SSR chuẩn.
+
+**Implications:**
+- `app/auth/confirm/route.ts` mới (thay cho `/auth/callback` từng dự kiến trong tech-spec).
+- Supabase email templates phải trỏ `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type={{ .Type }}` — **bước cấu hình dashboard, chưa làm**, cần Khánh set khi nối Vercel + production URL.
+- `proxy.ts` đã whitelist path `/auth` và `/login` (redirect guard chỉ chặn route khác).
+
+**Reversal trigger:** Email deliverability < 95% (magic link vào spam) → đẩy password lên primary; hoặc bỏ hẳn password nếu support reset/abuse trở thành gánh nặng.
+
+---
+
+## 2026-06-18 — Supabase key: ANON_KEY → PUBLISHABLE_KEY (SSR v2)
+
+**Decision:** Mọi Supabase client (`client.ts`, `server.ts`, `lib/supabase/proxy.ts`) dùng `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` thay vì `ANON_KEY`. `.env.local.example` giữ cả hai key trong giai đoạn chuyển tiếp.
+
+**Reasoning:**
+- Supabase đã giới thiệu publishable/secret key model mới thay cho legacy anon/service_role JWT keys; publishable key là cách hiện tại cho client-side.
+- Khớp pattern `@supabase/ssr` mới nhất → ít lệch docs, tránh agent tương lai raise "sao không dùng anon key".
+- Recruiter signal: dùng current key model > legacy.
+
+**Reversal trigger:** Supabase deprecate publishable key, hoặc cần service-role cho admin café insert (dùng secret key riêng server-side, không thay publishable cho client).
+
+---

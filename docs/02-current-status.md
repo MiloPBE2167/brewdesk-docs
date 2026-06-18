@@ -1,6 +1,6 @@
 # Current Status
 
-_Updated: 2026-06-15_
+_Updated: 2026-06-18_
 
 ## Phase
 Build Phase — Week 1 of 16 (P3 portfolio-first)
@@ -10,29 +10,36 @@ Portfolio-first, startup-optional. Optimize cho recruiter signal, measure user s
 
 ## Now working on
 **Phase 1 — Foundation** (14/6 – 28/6)
-- Pre-Monday: Next.js 16 scaffold + push (14/6)
-- Supabase project Singapore + `@supabase/ssr` (15/6)
-- Auth via magic link (17/6)
-- Schema 3 bảng đầu (profiles, cafes, checkins) + RLS (19/6)
-- shadcn/ui setup (18/6)
+- Pre-Monday: Next.js 16 scaffold + push (14/6) ✅
+- Supabase project Singapore + `@supabase/ssr` + 3 client files + `/test` smoke (15/6 → done 16/6, slip 1d) ✅
+- Auth (18/6) ✅ — `/login` email/password **+ magic link**, `app/auth/confirm` route, `getClaims()` + redirect guard trong `proxy.ts`. Migrate sang PUBLISHABLE_KEY.
+- shadcn/ui setup (18/6) ✅ — init neutral base, login UI rebuild bằng Card/Button/Input/Label + lucide-react
+- **Vercel hookup + env vars — CHƯA LÀM** (slipped từ 16/6), là blocker kế tiếp. Cần set Supabase email template → `/auth/confirm` khi có production URL.
+- Schema 3 bảng (profiles, cafes, checkins) + RLS (19/6) — sắp tới
 
 ## Target milestones
-- **Hè VN Beta v1 launch:** 17/8/2026 (2 ngày trước về Mỹ)
-- **Decision point v1:** 31/8/2026 (đo 2 tuần, viết decision doc)
-- **Beta v2 launch (sau hè):** giữa 11/2026 (chat + moderation)
-- **Final portfolio polish:** đầu 12/2026 (ready cho intern application Y2)
+- **Hè VN Beta v1 launch:** 17/8/2026
+- **Decision point v1:** 31/8/2026
+- **Beta v2 launch (sau hè):** giữa 11/2026
+- **Final portfolio polish:** đầu 12/2026
 
 ## Time budget realistic
-- Hè VN (15/6 – 19/8): ~15-20h/tuần (intern Mon-Fri)
-- Sau hè US (19/8 →): ~10-15h/tuần (school)
+- Hè VN: ~15-20h/tuần (intern Mon-Fri)
+- Sau hè US: ~10-15h/tuần (school)
 
 ## Open questions
 - [ ] Quận nào cho 50 café đầu — đề xuất Q1 + Q3 + Bình Thạnh
-- [ ] Recruit beta user: bạn bè + share trên FB cá nhân, target n=15-25
-- [ ] App repo (`brewdesk-app`) — chưa setup (next chat sẽ làm)
+- [ ] Recruit beta user: target n=15-25
+- [ ] When to remove `_smoke_test` table + `/test` route (auto-trigger: sau auth + real schema)
+- [ ] Supabase free tier 7-day pause mitigation — defer Phase 6
+- [ ] Set Supabase email template → `/auth/confirm?token_hash=...&type=...` (làm cùng Vercel hookup, cần production URL)
 
 ## Recent decisions (xem `03-decisions-log.md`)
-- 2026-06-15: Bump Next.js lock 14 → 16 (EOL avoidance + recruiter signal)
+- 2026-06-18: Auth = email/password **+** magic link (amend magic-link-only 2026-06-14)
+- 2026-06-18: Supabase ANON_KEY → PUBLISHABLE_KEY (SSR v2)
+- 2026-06-16: Add `/test` smoke page vào Phase 1 scope
+- 2026-06-16: `lib/supabase/middleware.ts` → `proxy.ts` (Next.js 16 convention sync)
+- 2026-06-15: Bump Next.js lock 14 → 16
 - 2026-06-15: Package manager = pnpm qua corepack
 - 2026-06-15: CLAUDE.md tách 2 (docs = behavior, app = code patterns)
 - 2026-06-14: Pivot to P3 (portfolio-first, startup-optional)
@@ -45,4 +52,4 @@ Portfolio-first, startup-optional. Optimize cho recruiter signal, measure user s
 - 2026-06-14: UI stack = shadcn/ui + Tailwind + lucide-react
 - 2026-06-14: 2 repo split (docs vs app), both public
 - 2026-06-14: Domain defer đến Phase 6
-- 2026-06-14: Fresh repos (cũ commit history messy, start clean)
+- 2026-06-14: Fresh repos

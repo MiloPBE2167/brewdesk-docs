@@ -8,7 +8,7 @@ _Version 1.0 — 2026-06-14_
 |---|---|---|
 | Framework | Next.js 16 (App Router + Turbopack) | Current stable, agent-aware scaffold (AGENTS.md/CLAUDE.md), Turbopack default ⇒ build/dev nhanh hơn webpack |
 | Hosting | Vercel | Zero-config với Next.js, free tier đủ closed beta |
-| DB + Auth | Supabase (Singapore region) | Postgres + Auth + Realtime + RLS, free tier đủ MVP |
+| DB + Auth | Supabase (Singapore region) | Postgres + Auth + Realtime + RLS, free tier đủ MVP. Auth = email/password + magic link (xem decisions-log 2026-06-18). Client dùng `PUBLISHABLE_KEY` (không phải anon key). |
 | UI | shadcn/ui + Tailwind CSS | Copy-paste components, accessible, recruiter signal |
 | Icons | lucide-react | Free, đẹp, fit shadcn |
 | Map | Mapbox GL JS | Free tier ~50k loads/month |
@@ -132,23 +132,22 @@ Detail SQL trong `brewdesk-app/supabase/migrations/`.
 ```text
 brewdesk-app/
 ├── app/                    # Next.js App Router
-│   ├── (auth)/
-│   │   ├── login/
-│   │   └── auth/callback/
-│   ├── (app)/
-│   │   ├── dashboard/
-│   │   ├── cafes/
-│   │   └── checkin/
+│   ├── login/              # email/password + magic link, Server Actions
+│   ├── auth/
+│   │   └── confirm/        # route.ts — verifyOtp (magic link + signup confirm)
+│   ├── cafes/              # (sắp tới)
+│   ├── checkin/            # (sắp tới)
 │   └── layout.tsx
+├── proxy.ts                # Next.js 16 session refresh (thay middleware.ts)
 ├── components/
-│   ├── ui/                 # shadcn components
+│   ├── ui/                 # shadcn components (button, input, label, card)
 │   └── feature/            # business components
 ├── lib/
 │   ├── supabase/
 │   │   ├── client.ts
 │   │   ├── server.ts
-│   │   └── middleware.ts
-│   └── utils.ts
+│   │   └── proxy.ts        # updateSession (Next.js 16 convention)
+│   └── utils.ts            # shadcn cn() helper
 ├── supabase/
 │   └── migrations/         # SQL migration files
 ├── public/

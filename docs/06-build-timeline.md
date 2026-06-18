@@ -85,11 +85,11 @@ Middle zone → pivot, viết doc.
 - [ ] Initial commit + push to GitHub `MiloPBE2167/brewdesk-app` (public)
 
 **Week 1 (15-21/6):**
-- [ ] Mon 15/6: Supabase project (Singapore region), get URL + anon key
-- [ ] Mon 15/6: Install `@supabase/ssr @supabase/supabase-js`, setup `lib/supabase/{client,server,middleware}.ts`
-- [ ] Tue 16/6: Vercel hookup, env vars (SUPABASE_URL, ANON_KEY), auto deploy on push to main
-- [ ] Wed 17/6: Auth — magic link, `/login`, `/auth/callback`, `/dashboard` protected via middleware
-- [ ] Thu 18/6: Install shadcn/ui (`pnpm dlx shadcn@latest init`), setup theme, build login UI
+- [x] Mon 15/6: Supabase project (Singapore region), get URL + key (→ done 16/6)
+- [x] Mon 15/6: Install `@supabase/ssr @supabase/supabase-js`, setup `lib/supabase/{client,server,proxy}.ts` (Next.js 16: `proxy.ts` thay `middleware.ts`)
+- [ ] **Vercel hookup, env vars (SUPABASE_URL, PUBLISHABLE_KEY), auto deploy on push to main — CHƯA LÀM, blocker kế tiếp** (slipped từ 16/6)
+- [x] Auth (done 18/6): `/login` email/password **+ magic link** (`signInWithOtp`), `app/auth/confirm` route (`verifyOtp`), `getClaims()` + redirect guard trong `proxy.ts`. Migrate ANON_KEY → PUBLISHABLE_KEY. (xem 03-decisions-log 2026-06-18)
+- [x] shadcn/ui (done 18/6): `shadcn init` neutral base + lucide-react, login UI rebuild bằng Card/Button/Input/Label
 - [ ] Fri 19/6: SQL migration — profiles + cafes + checkins (3 bảng) trong `supabase/migrations/`
 - [ ] Sat 20/6: Field day — đi 5-10 café Q1 quan sát, bắt đầu café list spreadsheet
 - [ ] Sun 21/6: Status update + weekly review
