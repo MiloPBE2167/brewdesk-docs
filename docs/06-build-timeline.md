@@ -96,7 +96,7 @@ Middle zone → pivot, viết doc.
 - [ ] Sun 21/6: Status update + weekly review
 
 **Week 2 (22-28/6):**
-- [x] RLS policies — viết + apply + test 2-user (verify deny/allow) **xong sớm 19/6** (Tuần 1). Test qua publishable key `scripts/rls-test.mjs`; phát sinh thêm `20260619030000_grants.sql` (table GRANTs) + `20260619020000_harden_security_definer_fn.sql` (move fn → `private`). Còn: bật Leaked Password Protection (Auth toggle).
+- [x] RLS policies — viết + apply + test 2-user (verify deny/allow) **xong sớm 19/6** (Tuần 1). Test qua publishable key `scripts/rls-test.mjs`; phát sinh thêm `20260619030000_grants.sql` (table GRANTs) + `20260619020000_harden_security_definer_fn.sql` (move fn → `private`). Leaked Password Protection bỏ qua (Pro-only, free tier không có).
 - [ ] Thu-Fri: Polish auth flow, error handling
 - [ ] Sat-Sun: Demo + write Phase 1 retrospective
 

@@ -20,7 +20,7 @@ Portfolio-first, startup-optional. Optimize cho recruiter signal, measure user s
   - `20260619030000_grants.sql` — thiếu GRANT tầng bảng (RLS không cấp quyền, chỉ lọc dòng)
   - `20260619020000_harden_security_definer_fn.sql` — chuyển `user_active_cafe_ids()` sang schema `private` (fix 2 warning Security Advisor)
 - **Vercel hookup + env vars — CHƯA LÀM** (slipped từ 16/6), là blocker kế tiếp. Cần set Supabase email template → `/auth/confirm` khi có production URL.
-- **Leaked Password Protection — CHƯA bật** (Auth toggle Dashboard, warning #3 còn lại)
+- **Leaked Password Protection — BỎ QUA** (warning #3): tính năng Pro plan, free tier không bật được. Accepted, không phải todo. Cân nhắc lại nếu lên Pro.
 - **Next: Vercel hookup** + Sat 20/6 field day (đi café Q1, bắt đầu spreadsheet 50 quán)
 
 ## Target milestones
