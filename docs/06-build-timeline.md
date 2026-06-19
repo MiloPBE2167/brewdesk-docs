@@ -90,12 +90,13 @@ Middle zone → pivot, viết doc.
 - [ ] **Vercel hookup, env vars (SUPABASE_URL, PUBLISHABLE_KEY), auto deploy on push to main — CHƯA LÀM, blocker kế tiếp** (slipped từ 16/6)
 - [x] Auth (done 18/6): `/login` email/password **+ magic link** (`signInWithOtp`), `app/auth/confirm` route (`verifyOtp`), `getClaims()` + redirect guard trong `proxy.ts`. Migrate ANON_KEY → PUBLISHABLE_KEY. (xem 03-decisions-log 2026-06-18)
 - [x] shadcn/ui (done 18/6): `shadcn init` neutral base + lucide-react, login UI rebuild bằng Card/Button/Input/Label
-- [ ] Fri 19/6: SQL migration — profiles + cafes + checkins (3 bảng) trong `supabase/migrations/`
+- [x] Fri 19/6: SQL migration — profiles + cafes + checkins (3 bảng) trong `supabase/migrations/20260619000000_init_schema.sql` (file written; apply lên DB còn lại)
+- [x] Fri 19/6: RLS migration `20260619010000_rls.sql` — KÉO LÊN SỚM từ Tuần 2 (xem decisions-log 2026-06-19). File written; apply + test 2-user còn lại Tuần 2
 - [ ] Sat 20/6: Field day — đi 5-10 café Q1 quan sát, bắt đầu café list spreadsheet
 - [ ] Sun 21/6: Status update + weekly review
 
 **Week 2 (22-28/6):**
-- [ ] Mon-Wed: RLS policies for 3 tables, test với 2 user account
+- [ ] Mon-Wed: RLS policies — đã viết sớm (19/6); Tuần 2 còn: apply lên DB + test với 2 user account (verify deny/allow đúng)
 - [ ] Thu-Fri: Polish auth flow, error handling
 - [ ] Sat-Sun: Demo + write Phase 1 retrospective
 

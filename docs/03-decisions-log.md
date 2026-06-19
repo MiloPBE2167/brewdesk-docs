@@ -412,3 +412,22 @@ checkins (
 **Reversal trigger:** Supabase deprecate publishable key, hoặc cần service-role cho admin café insert (dùng secret key riêng server-side, không thay publishable cho client).
 
 ---
+
+## 2026-06-19 — Schema 3 bảng + kéo RLS lên sớm (từ Tuần 2)
+
+**Decision:** Viết `20260619000000_init_schema.sql` (profiles + cafes + checkins, đúng tech-spec) VÀ `20260619010000_rls.sql` ngay trong Tuần 1, thay vì để RLS sang Tuần 2 (22-28/6) như timeline gốc.
+
+**Reasoning:**
+- Bảng tắt RLS + dùng publishable key (client-side) = đọc/ghi công khai. Đặc biệt `profiles` và `checkins` bị lộ. Không nên để khoảng hở này tồn tại qua bất kỳ deploy nào.
+- RLS principle đã locked sẵn trong tech-spec → không phải thiết kế mới, chỉ là hiện thực hoá → kéo lên sớm rẻ.
+- Tuần 2 còn lại để test RLS với 2 user account (việc test vẫn giữ nguyên lịch).
+
+**Quyết định kỹ thuật trong RLS:**
+- `cafes` write = admin-only: KHÔNG tạo policy ghi → chỉ service_role (bỏ qua RLS) ghi được. Khớp publishable/secret key model (2026-06-18).
+- `checkins` SELECT tham chiếu chính nó → bọc subquery vào function `user_active_cafe_ids()` SECURITY DEFINER để tránh infinite-recursion của RLS.
+- Dùng `(select auth.uid())` thay `auth.uid()` trực tiếp (Supabase perf best practice).
+- Không có policy DELETE checkins (giữ lịch sử để đo metric Decision v1).
+
+**Reversal trigger:** Nếu cần anonymous đọc `checkins` cho landing preview (hiện chỉ `cafes` public-read), hoặc đổi rule "thấy người cùng quán".
+
+---

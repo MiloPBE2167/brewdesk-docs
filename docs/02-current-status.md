@@ -1,6 +1,6 @@
 # Current Status
 
-_Updated: 2026-06-18_
+_Updated: 2026-06-19_
 
 ## Phase
 Build Phase — Week 1 of 16 (P3 portfolio-first)
@@ -14,8 +14,10 @@ Portfolio-first, startup-optional. Optimize cho recruiter signal, measure user s
 - Supabase project Singapore + `@supabase/ssr` + 3 client files + `/test` smoke (15/6 → done 16/6, slip 1d) ✅
 - Auth (18/6) ✅ — `/login` email/password **+ magic link**, `app/auth/confirm` route, `getClaims()` + redirect guard trong `proxy.ts`. Migrate sang PUBLISHABLE_KEY.
 - shadcn/ui setup (18/6) ✅ — init neutral base, login UI rebuild bằng Card/Button/Input/Label + lucide-react
+- Schema 3 bảng (profiles, cafes, checkins) (19/6) ✅ — `20260619000000_init_schema.sql` written
+- RLS (19/6) ✅ — `20260619010000_rls.sql` written, KÉO LÊN SỚM từ Tuần 2. Apply lên DB + test 2-user còn lại.
 - **Vercel hookup + env vars — CHƯA LÀM** (slipped từ 16/6), là blocker kế tiếp. Cần set Supabase email template → `/auth/confirm` khi có production URL.
-- Schema 3 bảng (profiles, cafes, checkins) + RLS (19/6) — sắp tới
+- **Next: apply 2 migration lên Supabase DB** (SQL Editor hoặc `supabase db push`)
 
 ## Target milestones
 - **Hè VN Beta v1 launch:** 17/8/2026
@@ -35,6 +37,7 @@ Portfolio-first, startup-optional. Optimize cho recruiter signal, measure user s
 - [ ] Set Supabase email template → `/auth/confirm?token_hash=...&type=...` (làm cùng Vercel hookup, cần production URL)
 
 ## Recent decisions (xem `03-decisions-log.md`)
+- 2026-06-19: Schema 3 bảng + kéo RLS lên sớm từ Tuần 2 (security: tránh hở bảng qua publishable key)
 - 2026-06-18: Auth = email/password **+** magic link (amend magic-link-only 2026-06-14)
 - 2026-06-18: Supabase ANON_KEY → PUBLISHABLE_KEY (SSR v2)
 - 2026-06-16: Add `/test` smoke page vào Phase 1 scope
