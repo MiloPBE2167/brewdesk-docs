@@ -14,10 +14,14 @@ Portfolio-first, startup-optional. Optimize cho recruiter signal, measure user s
 - Supabase project Singapore + `@supabase/ssr` + 3 client files + `/test` smoke (15/6 → done 16/6, slip 1d) ✅
 - Auth (18/6) ✅ — `/login` email/password **+ magic link**, `app/auth/confirm` route, `getClaims()` + redirect guard trong `proxy.ts`. Migrate sang PUBLISHABLE_KEY.
 - shadcn/ui setup (18/6) ✅ — init neutral base, login UI rebuild bằng Card/Button/Input/Label + lucide-react
-- Schema 3 bảng (profiles, cafes, checkins) (19/6) ✅ — `20260619000000_init_schema.sql` written
-- RLS (19/6) ✅ — `20260619010000_rls.sql` written, KÉO LÊN SỚM từ Tuần 2. Apply lên DB + test 2-user còn lại.
+- Schema 3 bảng (profiles, cafes, checkins) (19/6) ✅ — `20260619000000_init_schema.sql`, đã `db push`
+- RLS (19/6) ✅ — `20260619010000_rls.sql`, KÉO LÊN SỚM từ Tuần 2. Đã apply + **test 2-user PASS**.
+- Apply + test RLS 2-user (19/6) ✅ — test qua publishable key (`scripts/rls-test.mjs`), bắt 2 lỗi → fix bằng 2 migration:
+  - `20260619030000_grants.sql` — thiếu GRANT tầng bảng (RLS không cấp quyền, chỉ lọc dòng)
+  - `20260619020000_harden_security_definer_fn.sql` — chuyển `user_active_cafe_ids()` sang schema `private` (fix 2 warning Security Advisor)
 - **Vercel hookup + env vars — CHƯA LÀM** (slipped từ 16/6), là blocker kế tiếp. Cần set Supabase email template → `/auth/confirm` khi có production URL.
-- **Next: apply 2 migration lên Supabase DB** (SQL Editor hoặc `supabase db push`)
+- **Leaked Password Protection — CHƯA bật** (Auth toggle Dashboard, warning #3 còn lại)
+- **Next: Vercel hookup** + Sat 20/6 field day (đi café Q1, bắt đầu spreadsheet 50 quán)
 
 ## Target milestones
 - **Hè VN Beta v1 launch:** 17/8/2026
@@ -37,6 +41,7 @@ Portfolio-first, startup-optional. Optimize cho recruiter signal, measure user s
 - [ ] Set Supabase email template → `/auth/confirm?token_hash=...&type=...` (làm cùng Vercel hookup, cần production URL)
 
 ## Recent decisions (xem `03-decisions-log.md`)
+- 2026-06-19: Apply migrations + test RLS 2-user PASS → thêm GRANTs migration + chuyển SECURITY DEFINER fn sang `private`
 - 2026-06-19: Schema 3 bảng + kéo RLS lên sớm từ Tuần 2 (security: tránh hở bảng qua publishable key)
 - 2026-06-18: Auth = email/password **+** magic link (amend magic-link-only 2026-06-14)
 - 2026-06-18: Supabase ANON_KEY → PUBLISHABLE_KEY (SSR v2)

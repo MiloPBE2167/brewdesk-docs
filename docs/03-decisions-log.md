@@ -431,3 +431,24 @@ checkins (
 **Reversal trigger:** Nếu cần anonymous đọc `checkins` cho landing preview (hiện chỉ `cafes` public-read), hoặc đổi rule "thấy người cùng quán".
 
 ---
+
+## 2026-06-19 — Apply migrations + test RLS 2-user: thêm GRANTs + hardening function
+
+**Bối cảnh:** Sau khi `supabase db push` (init_schema + rls), chạy test RLS 2-user qua publishable key (`scripts/rls-test.mjs`, không phải SQL Editor vì Editor chạy quyền postgres = bypass RLS). Test bắt được 2 vấn đề, đã sửa bằng 2 migration mới:
+
+**1. Thiếu table GRANTs → `20260619030000_grants.sql`**
+- Triệu chứng: `authenticated` bị `permission denied for table profiles`. Init_schema bật RLS + tạo policy nhưng CHƯA grant quyền tầng bảng; project này không tự áp default privileges khi push.
+- Bài học locked: **RLS chỉ LỌC DÒNG, không cấp quyền.** Postgres kiểm 2 lớp — (1) GRANT tầng bảng, (2) RLS policy — phải có CẢ HAI. Mọi bảng mới từ giờ phải đi kèm GRANT khớp policy.
+- Grant tối thiểu khớp policy: profiles `select/insert/update` (authenticated); cafes `select` (anon + authenticated); checkins `select/insert/update` (authenticated). KHÔNG grant DELETE, KHÔNG grant write cafes (admin qua service_role).
+
+**2. SECURITY DEFINER function lộ qua REST API → `20260619020000_harden_security_definer_fn.sql`**
+- Security Advisor warn: `user_active_cafe_ids()` ở schema `public` bị PostgREST expose thành RPC `/rest/v1/rpc/user_active_cafe_ids`, anon + authenticated gọi được. Function chạy definer (bỏ qua RLS) nên không nên cho client gọi trực tiếp.
+- Fix: chuyển function sang schema `private` (PostgREST chỉ expose `public` + graphql) → mất RPC endpoint, policy vẫn chạy. KHÔNG dùng cách `revoke execute from authenticated` vì invoker của policy cần EXECUTE → sẽ "permission denied for function".
+
+**Kết quả:** Test RLS 2-user PASS toàn bộ (profiles/cafes/checkins, cả allow lẫn deny, same-active-cafe + checkout gating). 2 warning SECURITY DEFINER hết. → Đóng mốc "RLS pass 2-user test" của Phase 1.
+
+**Còn lại:** Leaked Password Protection (Auth toggle, bật trong Dashboard — không qua migration).
+
+**Reversal trigger:** Nếu chuyển sang dùng Supabase CLI với default-privileges chuẩn (postgres owner) thì grants có thể tự động — nhưng giữ explicit GRANT để migration self-contained, không phụ thuộc môi trường.
+
+---
