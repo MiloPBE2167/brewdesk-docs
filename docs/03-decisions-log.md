@@ -452,3 +452,21 @@ checkins (
 **Reversal trigger:** Nếu chuyển sang dùng Supabase CLI với default-privileges chuẩn (postgres owner) thì grants có thể tự động — nhưng giữ explicit GRANT để migration self-contained, không phụ thuộc môi trường.
 
 ---
+## 2026-06-20 — Vercel hookup + defer magic-link-on-prod sang Phase 5
+
+**Decision:** Import `brewdesk-app` vào Vercel (Next.js auto-detect, root `./`, build mặc định), set 2 env var `NEXT_PUBLIC_SUPABASE_URL` + `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (Prod+Preview), auto-deploy on push to `main`. Prod live tại `brewdesk-app.vercel.app`. **Hoãn** việc làm magic-link chạy trên prod sang Phase 5.
+
+**Bối cảnh kẹt magic link:** Route `app/auth/confirm/route.ts` dùng **token_hash flow** (đọc `?token_hash=&type=` rồi `verifyOtp`). Để link trong mail có `token_hash` phải **sửa email template**. Nhưng Supabase free tier **khoá sửa template sau custom SMTP**; built-in email dùng `{{ .ConfirmationURL }}` (flow `code`, không khớp route) và giới hạn ~2-4 mail/giờ ("not for production").
+
+**Alternatives considered:**
+- *Custom SMTP (Resend free 3k/tháng)*: unlock template → code chạy nguyên trạng; đúng chuẩn production. Nhưng tốn setup DNS/domain, nặng cho thời điểm field-day cuối tuần, và **chưa có beta user nào** để cần email thật.
+- *Thêm `/auth/callback` (exchangeCodeForSession)*: khớp default ConfirmationURL không cần SMTP, nhưng vẫn dính rate-limit 2/giờ → tắc khi recruit beta. Tốn code mà không giải gốc.
+- *Defer (chọn)*: email/password đã chạy (không cần email) → smoke-test prod được ngay, đóng Phase 1. Magic link local vẫn ổn để demo.
+
+**Reasoning:** Không giải bài toán email-production khi chưa có user. Để SMTP cho **Phase 5 (Polish + Beta prep, 10-17/8)** — đúng lúc cần email thật để mời beta, làm một lần gọn.
+
+**Env note:** KHÔNG set `NEXT_PUBLIC_SUPABASE_ANON_KEY` lên Vercel — không file nào trong code dùng (đã grep). Xoá luôn khỏi `.env.local.example` cho khớp.
+
+**Reversal trigger:** Tới Phase 5 (hoặc khi cần gửi >2 mail/giờ để recruit) → set up Resend SMTP, sửa template thành `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type={{ .Type }}`, test magic-link end-to-end trên prod.
+
+---

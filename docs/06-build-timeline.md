@@ -87,7 +87,7 @@ Middle zone → pivot, viết doc.
 **Week 1 (15-21/6):**
 - [x] Mon 15/6: Supabase project (Singapore region), get URL + key (→ done 16/6)
 - [x] Mon 15/6: Install `@supabase/ssr @supabase/supabase-js`, setup `lib/supabase/{client,server,proxy}.ts` (Next.js 16: `proxy.ts` thay `middleware.ts`)
-- [ ] **Vercel hookup, env vars (SUPABASE_URL, PUBLISHABLE_KEY), auto deploy on push to main — CHƯA LÀM, blocker kế tiếp** (slipped từ 16/6)
+- [x] **Vercel hookup, env vars (SUPABASE_URL, PUBLISHABLE_KEY), auto deploy on push to main — DONE 20/6** (slipped từ 16/6). Prod live `brewdesk-app.vercel.app`. Magic-link-on-prod defer → Phase 5 (free tier khoá email template, cần custom SMTP; email/password vẫn chạy). Xem decisions-log 2026-06-20.
 - [x] Auth (done 18/6): `/login` email/password **+ magic link** (`signInWithOtp`), `app/auth/confirm` route (`verifyOtp`), `getClaims()` + redirect guard trong `proxy.ts`. Migrate ANON_KEY → PUBLISHABLE_KEY. (xem 03-decisions-log 2026-06-18)
 - [x] shadcn/ui (done 18/6): `shadcn init` neutral base + lucide-react, login UI rebuild bằng Card/Button/Input/Label
 - [x] Fri 19/6: SQL migration — profiles + cafes + checkins (3 bảng) trong `supabase/migrations/20260619000000_init_schema.sql` (file written; apply lên DB còn lại)

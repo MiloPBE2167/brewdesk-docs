@@ -1,6 +1,6 @@
 # Current Status
 
-_Updated: 2026-06-19_
+_Updated: 2026-06-20_
 
 ## Phase
 Build Phase — Week 1 of 16 (P3 portfolio-first)
@@ -19,9 +19,10 @@ Portfolio-first, startup-optional. Optimize cho recruiter signal, measure user s
 - Apply + test RLS 2-user (19/6) ✅ — test qua publishable key (`scripts/rls-test.mjs`), bắt 2 lỗi → fix bằng 2 migration:
   - `20260619030000_grants.sql` — thiếu GRANT tầng bảng (RLS không cấp quyền, chỉ lọc dòng)
   - `20260619020000_harden_security_definer_fn.sql` — chuyển `user_active_cafe_ids()` sang schema `private` (fix 2 warning Security Advisor)
-- **Vercel hookup + env vars — CHƯA LÀM** (slipped từ 16/6), là blocker kế tiếp. Cần set Supabase email template → `/auth/confirm` khi có production URL.
+- **Vercel hookup + env vars (20/6) ✅** — import Next.js (auto-detect), set 2 env `NEXT_PUBLIC_SUPABASE_URL` + `_PUBLISHABLE_KEY` (Prod+Preview), auto-deploy on push to `main`. **Prod live: `brewdesk-app.vercel.app`** (`/login` 200, `/` redirect guard OK). Blocker hạ tầng Phase 1 đã gỡ.
+- **Magic-link-on-prod — DEFER sang Phase 5** (xem decisions-log 2026-06-20): free tier khoá email template (cần custom SMTP) → token_hash flow của route chưa khớp default email. Email/password vẫn chạy → smoke-test prod bằng password. Set Resend SMTP + sửa template ở Phase 5 khi cần mời beta.
 - **Leaked Password Protection — BỎ QUA** (warning #3): tính năng Pro plan, free tier không bật được. Accepted, không phải todo. Cân nhắc lại nếu lên Pro.
-- **Next: Vercel hookup** + Sat 20/6 field day (đi café Q1, bắt đầu spreadsheet 50 quán)
+- **Next:** Sat 20/6 field day (đi café Q1, bắt đầu spreadsheet 50 quán) → mở màn Phase 2
 
 ## Target milestones
 - **Hè VN Beta v1 launch:** 17/8/2026
@@ -38,9 +39,10 @@ Portfolio-first, startup-optional. Optimize cho recruiter signal, measure user s
 - [ ] Recruit beta user: target n=15-25
 - [ ] When to remove `_smoke_test` table + `/test` route (auto-trigger: sau auth + real schema)
 - [ ] Supabase free tier 7-day pause mitigation — defer Phase 6
-- [ ] Set Supabase email template → `/auth/confirm?token_hash=...&type=...` (làm cùng Vercel hookup, cần production URL)
+- [ ] (Phase 5) Custom SMTP (Resend) + sửa email template → `/auth/confirm?token_hash=...&type=...` để magic-link chạy trên prod — defer 2026-06-20, không cần đến khi mời beta
 
 ## Recent decisions (xem `03-decisions-log.md`)
+- 2026-06-20: Vercel hookup (prod live `brewdesk-app.vercel.app`, auto-deploy) + defer magic-link-on-prod sang Phase 5 (free tier khoá email template)
 - 2026-06-19: Apply migrations + test RLS 2-user PASS → thêm GRANTs migration + chuyển SECURITY DEFINER fn sang `private`
 - 2026-06-19: Schema 3 bảng + kéo RLS lên sớm từ Tuần 2 (security: tránh hở bảng qua publishable key)
 - 2026-06-18: Auth = email/password **+** magic link (amend magic-link-only 2026-06-14)
