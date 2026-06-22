@@ -27,9 +27,11 @@ Portfolio-first, startup-optional. Optimize cho recruiter signal, measure user s
 - `/cafes` list view (22/6) ✅ — card mobile: ảnh thật (`photo_url`) hoặc placeholder gradient + chữ cái đầu; badge quận/wifi/ổ cắm/độ ồn/vibe tags. Suspense + skeleton. Đọc bảng `cafes`.
 - Home sau login (22/6) ✅ — thay Next.js starter: intro + nút sang `/cafes` + đăng xuất (`app/actions.ts signOut`).
 - Pipeline import data (22/6) ✅ — Excel template (`data/`, gitignored) → script đọc xlsx sinh SQL → dán SQL Editor (`scripts/cafes-import.sql`). Không cần service-role key.
-- Field data: **9/50 quán** đã thu thập + import lên DB (hiện toàn **Q10** quanh Sư Vạn Hạnh — xem open question district).
-- Còn lại Phase 2: thu thập tới 50 quán; (defer) polish magic-link UX + upload ảnh qua Supabase Storage.
-- **Next:** tiếp tục thu thập quán + chốt vùng district target.
+- Field data: **9/50 quán** đã thu thập + import lên DB (hiện toàn **Q10** quanh Sư Vạn Hạnh).
+- **District target ĐÃ CHỐT (22/6):** Q10, Q1, Q3, Q5, Tân Bình (sát trung tâm trước; bỏ BT khỏi đợt đầu). Xem decisions-log.
+- **Chỗ chứa ảnh ĐÃ CHỐT (22/6):** Supabase Storage public bucket `cafe-photos` → `photo_url` lưu public URL. Batch-upload 1 lần khi đủ ~50 quán (placeholder ổn cho giờ). Code upload qua UI vẫn defer Phase 5.
+- Còn lại Phase 2: thu thập tới 50 quán (Q1/Q3/Q5/Q10/Tân Bình); (defer) polish magic-link UX + UI upload ảnh.
+- **Next:** thu thập tiếp 41 quán còn lại ở 5 quận target.
 
 ## Target milestones
 - **Hè VN Beta v1 launch:** 17/8/2026
@@ -42,7 +44,7 @@ Portfolio-first, startup-optional. Optimize cho recruiter signal, measure user s
 - Sau hè US: ~10-15h/tuần (school)
 
 ## Open questions
-- [ ] **Quận nào cho 50 café đầu** — kế hoạch gốc Q1+Q3+BT, nhưng 9 quán đầu (22/6) thu ở **Q10** (gần chỗ Khánh, tiện đi). Quyết: mở rộng target gồm Q10 hay giữ Q1/Q3/BT (coi 9 quán Q10 là test)?
+- [x] **Quận nào cho 50 café đầu** — CHỐT 22/6: Q10, Q1, Q3, Q5, Tân Bình (sát trung tâm trước; giữ 9 quán Q10, bỏ BT đợt đầu). Xem decisions-log.
 - [ ] (defer Phase 5) Polish UX magic-link (hiện phải nhập email rồi bấm link riêng — thô). Gộp khi wire SMTP, vì magic-link chưa chạy end-to-end trên prod.
 - [ ] Recruit beta user: target n=15-25
 - [ ] When to remove `_smoke_test` table + `/test` route (auto-trigger: sau auth + real schema)
@@ -50,6 +52,7 @@ Portfolio-first, startup-optional. Optimize cho recruiter signal, measure user s
 - [ ] (Phase 5) Custom SMTP (Resend) + sửa email template → `/auth/confirm?token_hash=...&type=...` để magic-link chạy trên prod — defer 2026-06-20, không cần đến khi mời beta
 
 ## Recent decisions (xem `03-decisions-log.md`)
+- 2026-06-22: Chốt district target = Q10/Q1/Q3/Q5/Tân Bình (sát trung tâm trước); chỗ chứa ảnh = Supabase Storage bucket `cafe-photos`
 - 2026-06-22: Kéo Phase 2 UI lên sớm (`/cafes` list + home) song song thu thập data; pipeline import xlsx→SQL; bài học lat/lng locale corruption; defer magic-link polish + photo upload
 - 2026-06-20: Vercel hookup (prod live `brewdesk-app.vercel.app`, auto-deploy) + defer magic-link-on-prod sang Phase 5 (free tier khoá email template)
 - 2026-06-19: Apply migrations + test RLS 2-user PASS → thêm GRANTs migration + chuyển SECURITY DEFINER fn sang `private`

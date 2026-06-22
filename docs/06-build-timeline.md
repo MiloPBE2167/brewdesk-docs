@@ -103,8 +103,9 @@ Middle zone → pivot, viết doc.
 **Phase 2 KÉO LÊN SỚM (đang làm trong Tuần 2):**
 - [x] `/cafes` list view chạy mobile (22/6) — card + ảnh/placeholder, badge quận/wifi/ổ cắm/độ ồn/vibe, Suspense+skeleton. Home sau login thay starter. (deliverable Phase 2 — đạt sớm)
 - [x] Pipeline import xlsx → SQL → SQL Editor (22/6) — `scripts/cafes-import.sql`; Excel template ở `data/` (gitignored)
-- [~] 50 café manual entry — **9/50** (22/6), hiện toàn Q10. Tiếp tục thu thập.
-- [ ] (defer Phase 5) polish magic-link UX; upload ảnh qua Supabase Storage
+- [~] 50 café manual entry — **9/50** (22/6). District target chốt: Q10/Q1/Q3/Q5/Tân Bình (sát trung tâm). Tiếp tục thu thập.
+- [ ] Ảnh quán: Supabase Storage bucket `cafe-photos` (chốt 22/6), batch-upload khi đủ ~50 quán
+- [ ] (defer Phase 5) polish magic-link UX; UI upload ảnh qua app
 
 (Các task phase sau expand khi reach phase đó, tránh stale.)
 

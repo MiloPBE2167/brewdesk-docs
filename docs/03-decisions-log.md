@@ -496,3 +496,24 @@ checkins (
 **Reversal trigger:** Khi `/cafes` + `/map` (Phase 3) cùng cần query quán → tách `lib/cafes.ts getCafes()` dùng chung (giờ 1 nơi dùng, chưa tách).
 
 ---
+
+## 2026-06-22 — Chốt district target (sát trung tâm trước) + chỗ chứa ảnh = Supabase Storage
+
+**Decision 1 — District target cho 50 quán đầu:** **Q10, Q1, Q3, Q5, Tân Bình** (ưu tiên các quận sát trung tâm thành phố trước). Mở rộng từ kế hoạch gốc (Q1+Q3+BT): giữ lại 9 quán Q10 đã thu (22/6) thay vì coi là test, bỏ Bình Thạnh khỏi đợt đầu (xa trung tâm hơn).
+
+**Reasoning:** 9 quán Q10 quanh Sư Vạn Hạnh đã thu sẵn (gần chỗ Khánh, tiện đi) → không bỏ phí. Q1/Q3/Q5/Q10/Tân Bình là cụm liền kề, mật độ café-học cao, di chuyển field-day ngắn. BT để đợt sau nếu cần thêm.
+
+**Decision 2 — Chỗ chứa ảnh quán = Supabase Storage (public bucket `cafe-photos`):**
+
+**Alternatives considered:**
+- *`/public` trong repo*: phình git (50 ảnh), mỗi lần sửa ảnh phải commit + redeploy. Rejected.
+- *Hotlink Google Maps/Facebook*: link rot + vi phạm ToS. Rejected.
+- *Dịch vụ ảnh ngoài (Cloudinary…)*: thêm dịch vụ + key mới, thừa cho 50 ảnh. Rejected.
+
+**Reasoning:** Đã có sẵn trong stack (cùng project Supabase) → không thêm hạ tầng. `photo_url` chỉ lưu public URL → khớp schema + import script hiện tại, không phải đổi gì. Free tier 1GB + 2GB egress/tháng; 50 ảnh resize webp ~800px ≈ 50–100KB/ảnh = ~5MB tổng → dư sức. Đặt tên theo slug `cafe-photos/<quan>/<slug>.webp`.
+
+**Workflow:** placeholder gradient đang ổn cho list view → thu data + toạ độ trước, **ảnh batch-upload 1 lần khi đủ ~50 quán** (resize local squoosh/sharp → upload bucket → dán URL vào cột `photo_url` xlsx → import). Không upload lẻ từng quán (tốn thời gian field-day). Phần code upload qua UI vẫn defer Phase 5.
+
+**Reversal trigger:** Nếu vượt 1GB / cần CDN transform / cần upload qua app UI → cân nhắc lại khi tới Phase 5.
+
+---
