@@ -1,15 +1,15 @@
 # Current Status
 
-_Updated: 2026-06-20_
+_Updated: 2026-06-22_
 
 ## Phase
-Build Phase — Week 1 of 16 (P3 portfolio-first)
+Build Phase — Week 2 of 16 (P3 portfolio-first)
 
 ## Mode
 Portfolio-first, startup-optional. Optimize cho recruiter signal, measure user signal lightly.
 
 ## Now working on
-**Phase 1 — Foundation** (14/6 – 28/6)
+**Phase 1 — Foundation (14/6 – 28/6) ✅ ĐÓNG** — auth password test PASS trên prod (22/6)
 - Pre-Monday: Next.js 16 scaffold + push (14/6) ✅
 - Supabase project Singapore + `@supabase/ssr` + 3 client files + `/test` smoke (15/6 → done 16/6, slip 1d) ✅
 - Auth (18/6) ✅ — `/login` email/password **+ magic link**, `app/auth/confirm` route, `getClaims()` + redirect guard trong `proxy.ts`. Migrate sang PUBLISHABLE_KEY.
@@ -22,7 +22,14 @@ Portfolio-first, startup-optional. Optimize cho recruiter signal, measure user s
 - **Vercel hookup + env vars (20/6) ✅** — import Next.js (auto-detect), set 2 env `NEXT_PUBLIC_SUPABASE_URL` + `_PUBLISHABLE_KEY` (Prod+Preview), auto-deploy on push to `main`. **Prod live: `brewdesk-app.vercel.app`** (`/login` 200, `/` redirect guard OK). Blocker hạ tầng Phase 1 đã gỡ.
 - **Magic-link-on-prod — DEFER sang Phase 5** (xem decisions-log 2026-06-20): free tier khoá email template (cần custom SMTP) → token_hash flow của route chưa khớp default email. Email/password vẫn chạy → smoke-test prod bằng password. Set Resend SMTP + sửa template ở Phase 5 khi cần mời beta.
 - **Leaked Password Protection — BỎ QUA** (warning #3): tính năng Pro plan, free tier không bật được. Accepted, không phải todo. Cân nhắc lại nếu lên Pro.
-- **Next:** Sat 20/6 field day (đi café Q1, bắt đầu spreadsheet 50 quán) → mở màn Phase 2
+
+**Phase 2 — Café data + list view (KÉO LÊN SỚM, mục tiêu gốc 29/6 – 12/7)**
+- `/cafes` list view (22/6) ✅ — card mobile: ảnh thật (`photo_url`) hoặc placeholder gradient + chữ cái đầu; badge quận/wifi/ổ cắm/độ ồn/vibe tags. Suspense + skeleton. Đọc bảng `cafes`.
+- Home sau login (22/6) ✅ — thay Next.js starter: intro + nút sang `/cafes` + đăng xuất (`app/actions.ts signOut`).
+- Pipeline import data (22/6) ✅ — Excel template (`data/`, gitignored) → script đọc xlsx sinh SQL → dán SQL Editor (`scripts/cafes-import.sql`). Không cần service-role key.
+- Field data: **9/50 quán** đã thu thập + import lên DB (hiện toàn **Q10** quanh Sư Vạn Hạnh — xem open question district).
+- Còn lại Phase 2: thu thập tới 50 quán; (defer) polish magic-link UX + upload ảnh qua Supabase Storage.
+- **Next:** tiếp tục thu thập quán + chốt vùng district target.
 
 ## Target milestones
 - **Hè VN Beta v1 launch:** 17/8/2026
@@ -35,13 +42,15 @@ Portfolio-first, startup-optional. Optimize cho recruiter signal, measure user s
 - Sau hè US: ~10-15h/tuần (school)
 
 ## Open questions
-- [ ] Quận nào cho 50 café đầu — đề xuất Q1 + Q3 + Bình Thạnh
+- [ ] **Quận nào cho 50 café đầu** — kế hoạch gốc Q1+Q3+BT, nhưng 9 quán đầu (22/6) thu ở **Q10** (gần chỗ Khánh, tiện đi). Quyết: mở rộng target gồm Q10 hay giữ Q1/Q3/BT (coi 9 quán Q10 là test)?
+- [ ] (defer Phase 5) Polish UX magic-link (hiện phải nhập email rồi bấm link riêng — thô). Gộp khi wire SMTP, vì magic-link chưa chạy end-to-end trên prod.
 - [ ] Recruit beta user: target n=15-25
 - [ ] When to remove `_smoke_test` table + `/test` route (auto-trigger: sau auth + real schema)
 - [ ] Supabase free tier 7-day pause mitigation — defer Phase 6
 - [ ] (Phase 5) Custom SMTP (Resend) + sửa email template → `/auth/confirm?token_hash=...&type=...` để magic-link chạy trên prod — defer 2026-06-20, không cần đến khi mời beta
 
 ## Recent decisions (xem `03-decisions-log.md`)
+- 2026-06-22: Kéo Phase 2 UI lên sớm (`/cafes` list + home) song song thu thập data; pipeline import xlsx→SQL; bài học lat/lng locale corruption; defer magic-link polish + photo upload
 - 2026-06-20: Vercel hookup (prod live `brewdesk-app.vercel.app`, auto-deploy) + defer magic-link-on-prod sang Phase 5 (free tier khoá email template)
 - 2026-06-19: Apply migrations + test RLS 2-user PASS → thêm GRANTs migration + chuyển SECURITY DEFINER fn sang `private`
 - 2026-06-19: Schema 3 bảng + kéo RLS lên sớm từ Tuần 2 (security: tránh hở bảng qua publishable key)

@@ -97,10 +97,16 @@ Middle zone → pivot, viết doc.
 
 **Week 2 (22-28/6):**
 - [x] RLS policies — viết + apply + test 2-user (verify deny/allow) **xong sớm 19/6** (Tuần 1). Test qua publishable key `scripts/rls-test.mjs`; phát sinh thêm `20260619030000_grants.sql` (table GRANTs) + `20260619020000_harden_security_definer_fn.sql` (move fn → `private`). Leaked Password Protection bỏ qua (Pro-only, free tier không có).
-- [ ] Thu-Fri: Polish auth flow, error handling
+- [x] Auth polish: zod validation login/signup/magic-link (22/6) — `app/login/actions.ts`
 - [ ] Sat-Sun: Demo + write Phase 1 retrospective
 
-(Subsequent phase tasks sẽ được expand khi reach phase đó, tránh stale.)
+**Phase 2 KÉO LÊN SỚM (đang làm trong Tuần 2):**
+- [x] `/cafes` list view chạy mobile (22/6) — card + ảnh/placeholder, badge quận/wifi/ổ cắm/độ ồn/vibe, Suspense+skeleton. Home sau login thay starter. (deliverable Phase 2 — đạt sớm)
+- [x] Pipeline import xlsx → SQL → SQL Editor (22/6) — `scripts/cafes-import.sql`; Excel template ở `data/` (gitignored)
+- [~] 50 café manual entry — **9/50** (22/6), hiện toàn Q10. Tiếp tục thu thập.
+- [ ] (defer Phase 5) polish magic-link UX; upload ảnh qua Supabase Storage
+
+(Các task phase sau expand khi reach phase đó, tránh stale.)
 
 ## Risks
 

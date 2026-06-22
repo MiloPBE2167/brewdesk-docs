@@ -470,3 +470,29 @@ checkins (
 **Reversal trigger:** Tới Phase 5 (hoặc khi cần gửi >2 mail/giờ để recruit) → set up Resend SMTP, sửa template thành `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type={{ .Type }}`, test magic-link end-to-end trên prod.
 
 ---
+
+## 2026-06-22 — Kéo Phase 2 UI lên sớm + pipeline import data + bài học lat/lng locale
+
+**Bối cảnh:** Phase 1 đóng sớm (auth/RLS/Vercel xong tuần 1). Thay vì đợi đủ 50 quán mới làm UI, kéo phần UI Phase 2 lên làm song song với thu thập data (data offline + UI ở bàn = độc lập, không chặn nhau). Cùng pattern "kéo RLS lên sớm" 19/6.
+
+**Đã build:**
+- `/cafes` list view — server component đọc bảng `cafes`, render card mobile (ảnh/placeholder, badge quận/wifi/ổ cắm/độ ồn/vibe), `<Suspense>` + skeleton (Next 16 Cache Components bắt buộc bọc data động). Home sau login thay Next starter. `app/actions.ts` signOut.
+- Type `Cafe` ở `lib/types.ts`; card ở `components/cafe-card.tsx`.
+
+**Pipeline import xlsx → DB:**
+- Excel template ở `data/` (gitignored — field data thô, không vào git). Script đọc xlsx → sinh `scripts/cafes-import.sql` → dán Supabase SQL Editor (postgres bỏ qua RLS). KHÔNG cần service-role key trong app → khớp model "cafes write = admin-only".
+- `photo_url` nhận link ảnh trực tiếp; link Maps/khác bỏ qua (placeholder hiện). Upload ảnh qua Supabase Storage: defer.
+
+**⭐ Bài học kỹ thuật — lat/lng locale corruption:**
+- Triệu chứng: toạ độ nhập trong Excel (locale VN, dấu thập phân = phẩy) bị **nuốt dấu chấm** → `10.7739` lưu thành `10773904372349700`. 9/9 quán dính.
+- Khôi phục: chuẩn-hoá độ lớn — chia 10 tới khi lat ∈ ~[8,12], lng ∈ ~[104,110] (toạ độ HCMC bị chặn chặt nên suy ngược được vị trí dấu chấm bất kể số chữ số). Idempotent: số đúng sẵn thì giữ nguyên → script xử lý cả batch cũ lẫn mới.
+- Phòng ngừa: format cột lat/lng = **Text** trong Excel → dấu `.` giữ nguyên văn. Lưu ý chung: dữ liệu số nhập tay qua công cụ locale-sensitive luôn rủi ro — ưu tiên Text + parse ở bước import.
+
+**Quyết định hoãn (defer):**
+- Polish UX magic-link (nhập email → bấm link riêng = thô) → Phase 5, gộp khi wire SMTP, vì magic-link chưa chạy end-to-end trên prod (polish sớm = đụng code 2 lần).
+
+**Mở (chưa quyết):** district target — 9 quán đầu thu ở Q10 (gần Khánh) thay vì Q1/Q3/BT kế hoạch gốc. Cần chốt mở rộng hay giữ.
+
+**Reversal trigger:** Khi `/cafes` + `/map` (Phase 3) cùng cần query quán → tách `lib/cafes.ts getCafes()` dùng chung (giờ 1 nơi dùng, chưa tách).
+
+---
