@@ -98,7 +98,7 @@ Middle zone → pivot, viết doc.
 **Week 2 (22-28/6):**
 - [x] RLS policies — viết + apply + test 2-user (verify deny/allow) **xong sớm 19/6** (Tuần 1). Test qua publishable key `scripts/rls-test.mjs`; phát sinh thêm `20260619030000_grants.sql` (table GRANTs) + `20260619020000_harden_security_definer_fn.sql` (move fn → `private`). Leaked Password Protection bỏ qua (Pro-only, free tier không có).
 - [x] Auth polish: zod validation login/signup/magic-link (22/6) — `app/login/actions.ts`
-- [ ] Sat-Sun: Demo + write Phase 1 retrospective
+- [x] Phase 1 retrospective (23/6) — `retro-phase-1.md`. Demo: defer (chưa có audience; gộp vào End-of-Phase-4 demo 5 bạn)
 
 **Phase 2 KÉO LÊN SỚM (đang làm trong Tuần 2):**
 - [x] `/cafes` list view chạy mobile (22/6) — card + ảnh/placeholder, badge quận/wifi/ổ cắm/độ ồn/vibe, Suspense+skeleton. Home sau login thay starter. (deliverable Phase 2 — đạt sớm)
